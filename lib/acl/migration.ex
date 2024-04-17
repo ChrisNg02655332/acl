@@ -13,6 +13,7 @@ defmodule Acl.Migrations do
 
     create_if_not_exists table(:acl_resources, prefix: opts[:prefix] || "public") do
       add(:resource, :string, null: true)
+      add(:path, :string)
       add(:parent, :string, default: nil)
 
       timestamps(type: :utc_datetime)
