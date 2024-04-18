@@ -4,7 +4,7 @@
 
 ## Installation
 
-The package can be installed by adding `acme` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `acl` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
