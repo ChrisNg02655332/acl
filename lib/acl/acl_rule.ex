@@ -7,7 +7,7 @@ defmodule Acl.AclRule do
     field(:allowed, Ecto.Enum, values: [:none, :self, :related, :all], default: :self)
     field(:action, Ecto.Enum, values: [:none, :read, :write, :delete, :edit], default: :read)
     field(:role, :string, primary_key: true)
-    belongs_to(:resource, AclResource, references: :id, primary_key: true)
+    belongs_to(:resource, Acl.AclResource, references: :id, primary_key: true)
 
     timestamps(type: :utc_datetime)
   end
