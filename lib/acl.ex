@@ -64,11 +64,19 @@ defmodule Acl do
   alias Acl.{AclRole, AclResource, AclRule}
   import Acl.Config
 
+  @list_of_condition ~w(none read write edit delete self related all)a
+
   def has_access(%{"role" => _, "resource" => _, "action" => _} = params, opts \\ []) do
     prefix = opts[:prefix] || "public"
-    action = String.to_atom(params["action"])
 
-    allowed = if params["allowed"], do: String.to_atom(params["allowed"]), else: nil
+    action = String.to_atom(String.downcase(params["action"]))
+    allowed = if params["allowed"], do: String.to_atom(String.downcase(params["allowed"])), else: nil
+
+    if action not in @list_of_condition, do: raise("action field does not supported")
+    if allowed != nil and allowed not in @list_of_condition, do: raise("allowed field does not supported")
+
+    action = converter(String.to_atom(String.downcase(params["action"])))
+    allowed = if allowed, do: converter(allowed), else: nil
 
     with {:ok, resource} <- get_resource_by([resource: params["resource"]], prefix),
          {:ok, rule} <- get_rule_by([resource_id: resource.id, role: params["role"]], prefix) do
@@ -155,10 +163,10 @@ defmodule Acl do
     end
   end
 
-  defp condition(rule, action, nil), do: converter(rule.action) >= converter(action)
+  defp condition(rule, action, nil), do: action > 0 and converter(rule.action) >= action
 
   defp condition(rule, action, allowed),
-    do: converter(rule.action) >= converter(action) and converter(rule.allowed) >= converter(allowed)
+    do: action > 0 and allowed > 0 and converter(rule.action) >= action and converter(rule.allowed) >= allowed
 
   defp converter(params) when is_atom(params) do
     case params do

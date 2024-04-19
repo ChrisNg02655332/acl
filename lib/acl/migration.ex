@@ -2,9 +2,9 @@ defmodule Acl.Migrations do
   use Ecto.Migration
 
   def up(opts \\ []) do
-    prefix = opts[:prefix] || "public"
+    prefix = opts[:prefix]
 
-    execute("CREATE SCHEMA IF NOT EXISTS #{prefix}")
+    if prefix, do: execute("CREATE SCHEMA IF NOT EXISTS #{prefix}")
 
     create_if_not_exists table(:acl_roles, primary_key: false, prefix: prefix) do
       add(:role, :string, null: false, primary_key: true)
@@ -59,7 +59,7 @@ defmodule Acl.Migrations do
   end
 
   def down(opts \\ []) do
-    prefix = opts[:prefix] || "public"
+    prefix = opts[:prefix]
 
     drop_if_exists(table(:acl_rules, prefix: prefix))
     drop_if_exists(table(:acl_resources, prefix: prefix))
