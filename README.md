@@ -9,7 +9,7 @@ The package can be installed by adding `acl` to your list of dependencies in `mi
 ```elixir
 def deps do
   [
-    {:acl, git: "https://github.com/ChrisNg02655332/acl.git", tags: "0.1.0"}
+    {:acl, git: "https://github.com/ChrisNg02655332/acl.git", tag: "0.1.0"}
   ]
 end
 ```
